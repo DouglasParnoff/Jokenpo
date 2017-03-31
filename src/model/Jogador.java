@@ -15,18 +15,7 @@ public class Jogador {
     
     public Jogador(String nome){
         this.nome = nome;
-    }
-    
-    public void jogar(){
-        int escolha = (int) (Math.random() * 3);
-        if(escolha == 0)            
-            this.item = new Item("Pedra");
-        else if(escolha == 1)
-            this.item = new Item("Papel");
-        else
-            this.item = new Item("Tesoura");
-        System.out.printf("%s - item escolhido: %s\n\n", this.nome, this.item.getNome());
-    }
+    }    
 
     public String getNome() {
         return nome;

@@ -5,6 +5,8 @@
  */
 package controller;
 
+import java.util.HashMap;
+import java.util.Map;
 import model.Jogador;
 
 /**
@@ -12,8 +14,21 @@ import model.Jogador;
  * @author Douglas
  */
 public class Juiz {
-    public static String avaliar(Jogador jogadorUm, Jogador jogadorDois){
-        StringBuilder resultado = new StringBuilder();
+    
+    private static Map<String, String> map;
+    private static String PEDRA, PAPEL, TESOURA;
+    
+    public Juiz(){
+        PEDRA = "pedra";
+        PAPEL = "papel";
+        TESOURA = "tesoura";
+        map = new HashMap<>();
+        map.put(PEDRA, TESOURA); /* chave: vence, valor: perde */
+        map.put(PAPEL, PEDRA);   /* chave: vence, valor: perde */
+        map.put(TESOURA, PAPEL); /* chave: vence, valor: perde */            
+    }
+        
+    public static String getVencedor(Jogador jogadorUm, Jogador jogadorDois){
         /*
         Regras:
             Se ambos forem iguais, empate
@@ -21,31 +36,16 @@ public class Juiz {
             Tesoura ganha de Papel
             Papel ganha de Pedra
         */
-        if(jogadorUm.getItem().getNome() == null){
-            resultado.append("Jogador ").append(jogadorUm.getNome()).append(" deve fazer uma escolha: Pedra, Papel OU tesoura");
-        }else if(jogadorDois.getItem().getNome() == null){
-            resultado.append("Jogador ").append(jogadorDois.getNome()).append(" deve fazer uma escolha: Pedra, Papel OU tesoura");
-        }else if( jogadorUm.getItem().getNome().equals(jogadorDois.getItem().getNome())){            
-            resultado.append("Empate");
-        }else if(jogadorUm.getItem().getNome().equals("Pedra")){
-            if(jogadorDois.getItem().getNome().equals("Tesoura")){
-                resultado.append("Vencedor: ").append(jogadorUm.getNome());                        
-            }else{
-                resultado.append("Vencedor: ").append(jogadorDois.getNome());
-            }
-        }else if(jogadorUm.getItem().getNome().equals("Tesoura")){
-            if(jogadorDois.getItem().getNome().equals("Papel")){
-                resultado.append("Vencedor: ").append(jogadorUm.getNome());                        
-            }else{
-                resultado.append("Vencedor: ").append(jogadorDois.getNome());
-            }            
-        }else{
-            if(jogadorDois.getItem().getNome().equals("Pedra")){
-                resultado.append("Vencedor: ").append(jogadorUm.getNome());                        
-            }else{
-                resultado.append("Vencedor: ").append(jogadorDois.getNome());
-            }             
-        }
-        return resultado.toString();
+        if(jogadorUm.getItem().getNome() == null  || jogadorDois.getItem().getNome() == null  
+                || map.get(jogadorUm.getItem().getNome().toLowerCase()) == null 
+                || map.get(jogadorDois.getItem().getNome().toLowerCase()) == null) // se parâmetro de escolha vier como null, também pega
+            return "Joguem novamente, pois um dos valores é inválido"; // para melhorar a resposta ao usuário, seria necessário separar os condicionais, para então saber e poder apontar quem escolheu errado
+        if(jogadorUm.getItem().getNome().equalsIgnoreCase(jogadorDois.getItem().getNome()))
+            return "Empate";        
+        if(map.get(jogadorUm.getItem().getNome().toLowerCase()).equalsIgnoreCase(jogadorDois.getItem().getNome())) // se existe a chave no map e o valor é igual ao do outro jogador
+            return "Jogador 1 venceu: " + jogadorUm.getNome();
+        if(map.get(jogadorDois.getItem().getNome().toLowerCase()).equalsIgnoreCase(jogadorUm.getItem().getNome()))
+            return "Jogador 2 venceu: " + jogadorDois.getNome();
+        return "Ninguém venceu";        
     }
 }

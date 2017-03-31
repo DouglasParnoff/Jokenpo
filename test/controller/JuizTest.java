@@ -50,10 +50,10 @@ public class JuizTest {
      * Test of avaliar method, of class Juiz.
      */
     @Test
-    public void testEmpate() {
-        jogadorUm.setItem(new Item("Pedra"));
+    public void testaEmpate() {
+        jogadorUm.setItem(new Item("PEDra")); // testando ignore case tb
         jogadorDois.setItem(new Item("Pedra"));        
-        assertEquals("Empate", Juiz.avaliar(jogadorUm, jogadorDois));        
+        assertEquals("Empate", new Juiz().getVencedor(jogadorUm, jogadorDois));        
     }
     
     @Test
@@ -66,21 +66,23 @@ public class JuizTest {
     @Test
     public void testaNulo(){
         jogadorUm.setItem(new Item(null));
-        jogadorDois.setItem(new Item(null));        
-        assertEquals(("Jogador " + jogadorUm.getNome() + " deve fazer uma escolha: Pedra, Papel OU tesoura"), 
-                Juiz.avaliar(jogadorUm, jogadorDois));
+        jogadorDois.setItem(new Item(null));
+        assertEquals("Joguem novamente, pois um dos valores é inválido", 
+                     new Juiz().getVencedor(jogadorUm, jogadorDois));
         jogadorUm.setItem(new Item("Diferente de null"));
-        assertEquals(("Jogador " + jogadorDois.getNome() + " deve fazer uma escolha: Pedra, Papel OU tesoura"), 
-                Juiz.avaliar(jogadorUm, jogadorDois));        
+        assertEquals("Joguem novamente, pois um dos valores é inválido", 
+                     new Juiz().getVencedor(jogadorUm, jogadorDois));        
     }
     
     public void testaVencedor(String vencedor, String perdedor){
         jogadorUm.setItem(new Item(vencedor));
         jogadorDois.setItem(new Item(perdedor));        
-        assertEquals(("Vencedor: " + jogadorUm.getNome()), Juiz.avaliar(jogadorUm, jogadorDois));
-        jogadorUm.setItem(new Item(perdedor));
-        jogadorDois.setItem(new Item(vencedor));
-        assertEquals(("Vencedor: " + jogadorDois.getNome()), Juiz.avaliar(jogadorUm, jogadorDois));        
+        assertEquals(("Jogador 1 venceu: " + jogadorUm.getNome()), 
+                     new Juiz().getVencedor(jogadorUm, jogadorDois));
+        jogadorUm.setItem(new Item(perdedor));   // invertendo parâmetros
+        jogadorDois.setItem(new Item(vencedor)); // invertendo parâmetros
+        assertEquals(("Jogador 2 venceu: " + jogadorDois.getNome()), 
+                     new Juiz().getVencedor(jogadorUm, jogadorDois));        
     }            
     
 }
